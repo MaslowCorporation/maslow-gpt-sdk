@@ -118,7 +118,7 @@ export default async function TransformCloudFile({
 
     // Do the initial HTTP request that starts the background work
     const response = await axios.post(
-      `${Constants.api_base_url_web}/transform_file_cloud?apiKey=${apiKey}`,
+      `${Constants.api_base_url_tailscale}/transform_file_cloud?apiKey=${apiKey}`,
       { publicId, transformations, deliveryType, assetType, version, fileExtension }
     );
 

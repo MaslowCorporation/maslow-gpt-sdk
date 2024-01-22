@@ -1,3 +1,4 @@
+import GetGoogleAPIKey from "./services/GetGoogleAPIKey/GetGoogleAPIKey.js";
 import GetGPTCode from "./services/GetGPTCode/GetGPTCode.js";
 import GetChatGPTArt from "./services/GetChatGPTArt/GetChatGPTArt.js";
 import TranslateObject from "./services/TranslateObject/TranslateObject.js";
@@ -15,6 +16,7 @@ import Buy5KAPICreditsLink from "./services/Buy5KAPICreditsLink/Buy5KAPICreditsL
 import GetAPIClientInfo from "./services/GetAPIClientInfo/GetAPIClientInfo.js";
 import UpdateWorkData from "./services/UpdateWorkData/UpdateWorkData.js";
 declare const _default: {
+    GetGoogleAPIKey: typeof GetGoogleAPIKey;
     GetGPTCode: typeof GetGPTCode;
     GetChatGPTArt: typeof GetChatGPTArt;
     TranslateObject: typeof TranslateObject;

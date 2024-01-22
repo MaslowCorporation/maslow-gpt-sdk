@@ -4,17 +4,53 @@ import axios from "axios";
 // @ts-ignore
 import { Constants } from "../../constants/constants.js";
 
-export default async function GetAPIClientInfo({
+import { TestGetGoogleAPIKey } from "./pieces/TestGetGoogleAPIKey.js";
+import { HandleError } from "./pieces/HandleError.js";
+import { HandleFailedBackgroundWorkInit } from "./pieces/HandleFailedBackgroundWorkInit.js";
+import { CheckBackgroundWork } from "./pieces/CheckBackgroundWork.js";
+import { GetGoogleAPIKeyStatus } from "./pieces/GetGoogleAPIKeyStatus.js";
+
+/**
+ *  
+ * Uncomment this code below, and run the 
+ * 
+ * npm run run-service GetGoogleAPIKey
+ * 
+ * command to test this SDK method quickly and dirty ;-)
+ * 
+ **
+(async () => {
+  await TestGetGoogleAPIKey();
+})();
+*/
+
+/**
+ * 
+ * @param apiKey, the API Key, a string.
+ * 
+ * @param params, an object of options, 
+ * for your background job in the backend, 
+ * if you need to customize the shizzle.
+ * 
+ * @param onSuccess, a callback that gives you the fruit of your backend's  
+ * hard work
+ * 
+ * @param onError, a callback when the shizzle got messy.
+
+ * @param print, do we print some basic logging info ?
+ * 
+ * @returns 
+ *
+ * Short version without background work*/
+export default async function GetGoogleAPIKey({
   onSuccess,
   onError,
-  apiKey,
-  params,
+  google_uid,
   print = true,
 }: {
   onSuccess?: (output: any) => void;
   onError?: (error: Error) => void;
-  apiKey: string;
-  params?: any;
+  google_uid: string;
   print?: boolean;
 }): Promise<string | null> {
   try {
@@ -28,25 +64,20 @@ export default async function GetAPIClientInfo({
     // but instead
     // send an object like this: { prop1, prop2, .... }
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/get_api_client_info?apiKey=${apiKey}`,
+      `${Constants.api_base_url_tailscale}/get_google_api_key?id=${google_uid}`,
 
       // !!!!!!!!!!!!! IMPORTANT, READ THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
       // Uncomment the formData below, and remove the objet below it,
       // IF YOU WANT TO UPLOAD A FILE (photo, video, etc...)
       //formData
 
-      // !!!!!!!!!!!!! IMPORTANT, READ THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
-      // This objet is used if the request doesn't send a file
-      // If your request sends a file to the server, 
-      // remove the object below, and uncomment formData above
-      { params }
     );
 
     const responseData = response.data;
     const prettyResponseData = JSON.stringify(responseData, null, 2);
 
     if (response.status >= 200 && response.status < 300) {
-      const answer = responseData.answer;
+      const answer = responseData;
 
       // Success (2xx response)
       print && console.log("Request succeeded!");
