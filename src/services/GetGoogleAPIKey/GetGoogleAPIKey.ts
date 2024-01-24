@@ -45,12 +45,14 @@ import { GetGoogleAPIKeyStatus } from "./pieces/GetGoogleAPIKeyStatus.js";
 export default async function GetGoogleAPIKey({
   onSuccess,
   onError,
-  google_uid,
+  google_user_uid,
+  email,
   print = true,
 }: {
   onSuccess?: (output: any) => void;
   onError?: (error: Error) => void;
-  google_uid: string;
+  google_user_uid: string;
+  email: string;
   print?: boolean;
 }): Promise<string | null> {
   try {
@@ -64,12 +66,15 @@ export default async function GetGoogleAPIKey({
     // but instead
     // send an object like this: { prop1, prop2, .... }
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/get_google_api_key?id=${google_uid}`,
+      `${Constants.api_base_url_tailscale}/get_google_api_key`,
 
       // !!!!!!!!!!!!! IMPORTANT, READ THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
       // Uncomment the formData below, and remove the objet below it,
       // IF YOU WANT TO UPLOAD A FILE (photo, video, etc...)
-      //formData
+      {
+        google_user_uid,
+        email
+      }
 
     );
 

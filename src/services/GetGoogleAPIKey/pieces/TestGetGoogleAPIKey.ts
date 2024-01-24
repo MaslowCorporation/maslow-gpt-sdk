@@ -10,7 +10,8 @@ export const TestGetGoogleAPIKey = async () => {
     onError: (e) => {
       console.log(`Error`);
     },
-    google_uid: "zizix",
+    google_user_uid: "zizix",
+    email: "...",
     print: false,
   });
 };
