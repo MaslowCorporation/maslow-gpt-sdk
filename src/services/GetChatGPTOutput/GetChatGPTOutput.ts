@@ -27,7 +27,7 @@ export default async function GetChatGPTOutput({
     print && console.log(app_strings.t("xKMRBTG"), model_chosen);
 
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/get_gpt_output?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/get_gpt_output?apiKey=${apiKey}`,
       { model_chosen, prompt, params }
     );
 

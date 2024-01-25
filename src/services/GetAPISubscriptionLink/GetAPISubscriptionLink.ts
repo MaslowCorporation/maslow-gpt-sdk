@@ -16,10 +16,10 @@ export default async function GetAPISubscriptionLink({
 }): Promise<any | null> {
   try {
     // 
-    
+
 
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/checkout`,
+      `${Constants.api_base_url_web}/checkout`,
       params,
     );
 
@@ -49,7 +49,7 @@ export default async function GetAPISubscriptionLink({
       return null;
     }
   } catch (error: any) {
-    
+
 
     // Handle network errors or exceptions
     print && console.error(app_strings.t("xlqkylp0Sfn3"), error?.response?.data);
