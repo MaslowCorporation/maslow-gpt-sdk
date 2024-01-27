@@ -109,7 +109,7 @@ export default async function CreateArduinoSketch({
 
     // Do the initial HTTP request that starts the background work
     const response = await axios.post(
-      `${Constants.api_base_url_web}/create_arduino_sketch?apiKey=${apiKey}`,
+      `${Constants.api_base_url_tailscale}/create_arduino_sketch?apiKey=${apiKey}`,
       {
         model_chosen,
         programDescription,

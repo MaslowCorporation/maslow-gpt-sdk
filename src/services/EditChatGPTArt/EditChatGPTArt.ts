@@ -41,7 +41,7 @@ export default async function EditChatGPTArt({
 
     // Send the POST request with the FormData
     const response = await axios.post(
-      `${Constants.api_base_url_web}/edit_gpt_art?apiKey=${apiKey}`,
+      `${Constants.api_base_url_tailscale}/edit_gpt_art?apiKey=${apiKey}`,
       formData
     );
 

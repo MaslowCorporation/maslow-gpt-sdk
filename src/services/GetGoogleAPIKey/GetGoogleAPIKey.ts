@@ -58,7 +58,7 @@ export default async function GetGoogleAPIKey({
   try {
     // 
 
-    debugger;
+    
 
     // Send the POST request with the FormData,
     // if your request uploads data to the server.
@@ -67,7 +67,7 @@ export default async function GetGoogleAPIKey({
     // but instead
     // send an object like this: { prop1, prop2, .... }
     const response = await axios.post(
-      `${Constants.api_base_url_web}/get_google_api_key`,
+      `${Constants.api_base_url_tailscale}/get_google_api_key`,
 
       // !!!!!!!!!!!!! IMPORTANT, READ THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
       // Uncomment the formData below, and remove the objet below it,
@@ -79,7 +79,7 @@ export default async function GetGoogleAPIKey({
 
     );
 
-    debugger;
+    
 
     const responseData = response.data;
     const prettyResponseData = JSON.stringify(responseData, null, 2);
@@ -110,7 +110,7 @@ export default async function GetGoogleAPIKey({
       return null;
     }
   } catch (error: any) {
-    debugger;
+    
 
     // Handle network errors or exceptions
     print && console.error("An error occurred:", error?.response?.data);
