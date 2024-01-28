@@ -1,5 +1,6 @@
 // Your Own SDK Methods imports
 /* PLOP_INJECT_IMPORT */
+import GoogleLogin from "./services/GoogleLogin/GoogleLogin.js";
 import GetGoogleAPIKey from "./services/GetGoogleAPIKey/GetGoogleAPIKey.js";
 import GetGPTCode from "./services/GetGPTCode/GetGPTCode.js";
 import GetChatGPTArt from "./services/GetChatGPTArt/GetChatGPTArt.js";
@@ -23,6 +24,7 @@ import UpdateWorkData from "./services/UpdateWorkData/UpdateWorkData.js";
 export default {
   // Your Own SDK Methods
   /* PLOP_INJECT_SDK_METHOD */
+    GoogleLogin,
     GetGoogleAPIKey,
     GetGPTCode,
     GetChatGPTArt,

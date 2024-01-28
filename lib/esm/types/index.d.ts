@@ -1,3 +1,4 @@
+import GoogleLogin from "./services/GoogleLogin/GoogleLogin.js";
 import GetGoogleAPIKey from "./services/GetGoogleAPIKey/GetGoogleAPIKey.js";
 import GetGPTCode from "./services/GetGPTCode/GetGPTCode.js";
 import GetChatGPTArt from "./services/GetChatGPTArt/GetChatGPTArt.js";
@@ -16,6 +17,7 @@ import Buy5KAPICreditsLink from "./services/Buy5KAPICreditsLink/Buy5KAPICreditsL
 import GetAPIClientInfo from "./services/GetAPIClientInfo/GetAPIClientInfo.js";
 import UpdateWorkData from "./services/UpdateWorkData/UpdateWorkData.js";
 declare const _default: {
+    GoogleLogin: typeof GoogleLogin;
     GetGoogleAPIKey: typeof GetGoogleAPIKey;
     GetGPTCode: typeof GetGPTCode;
     GetChatGPTArt: typeof GetChatGPTArt;

@@ -5,7 +5,7 @@ export const TestGetGPTOutput = async () => {
 
   return GetGPTOutput({
     model_chosen: "gpt-4",
-    prompt: "Give me a paragraph describing the island called Martinique.",
+    prompt: "Give me a ridiculously long paragraph describing the island called Martinique.",
     params: {
       test_timer_duration: 100000
     },
@@ -23,8 +23,8 @@ export const TestGetGPTOutput = async () => {
     onProgress: (progress) => {
       console.log(`Job Progress: ${JSON.stringify(progress.progress, null, 2)}`);
     },
-    apiKey: "16504dcc6bf00403ed8b9fff549f0d75",
-    print: false,
+    apiKey: "",
+    print: true,
     // jobId: "<SOME_JOB_ID>"
   });
 };
