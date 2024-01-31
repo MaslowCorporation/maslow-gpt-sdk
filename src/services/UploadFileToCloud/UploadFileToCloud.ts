@@ -114,7 +114,7 @@ export default async function UploadFileToCloud({
 
     // Send the POST request with the FormData
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/upload_file_cloud?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/upload_file_cloud?apiKey=${apiKey}`,
       formData,
       {
         headers: {

@@ -67,7 +67,7 @@ export default async function GetGoogleAPIKey({
     // but instead
     // send an object like this: { prop1, prop2, .... }
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/get_google_api_key`,
+      `${Constants.api_base_url_web}/get_google_api_key`,
 
       // !!!!!!!!!!!!! IMPORTANT, READ THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!
       // Uncomment the formData below, and remove the objet below it,

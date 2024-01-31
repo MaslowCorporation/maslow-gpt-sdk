@@ -1,19 +1,7 @@
-import FormData from "form-data";
-import axios from "axios";
-
-// @ts-ignore
-import { Constants } from "../../constants/constants.js";
-
-import { TestTranslateObject } from "./pieces/TestTranslateObject.js";
-import { HandleError } from "./pieces/HandleError.js";
-import { HandleFailedBackgroundWorkInit } from "./pieces/HandleFailedBackgroundWorkInit.js";
-import { CheckBackgroundWork } from "./pieces/CheckBackgroundWork.js";
-import { TranslateObjectStatus } from "./pieces/TranslateObjectStatus.js";
-import GetQtyKeysInObj from "../GetQtyKeysInObj/GetQtyKeysInObj.js";
-import { app_strings } from "../../stringRepos/AppStrings/AppStrings.js";
-import TranslateText from "../TranslateText/TranslateText.js";
 import { Delay } from "../Delay/Delay.js";
-import { RunIfPossible } from "../RunIfPossible/RunIfPossible.js";
+import GetGPTCode from "../GetGPTCode/GetGPTCode.js";
+import { TryParse } from "../TryParse/TryParse.js";
+import { TestTranslateObject } from "./pieces/TestTranslateObject.js";
 
 /**
  *  
@@ -88,145 +76,139 @@ export default async function TranslateObject({
   obj: any;
   language: string;
   retries?: number;
-  progressIntervalMs: number,
-  onProgress?: (progress: TranslateObjectStatus) => void;
+  progressIntervalMs: number;
+  onProgress?: (progress: any) => void;
   onSuccess?: (output: any) => void;
   onJobCreated?: (jobId: string) => void;
   onError?: (error: any) => void;
   print?: boolean;
   jobId?: string;
 }): Promise<any> {
-  let newObj: any = {};
-  let currentIndex: any = 1;
-  let retriesCount: any = 1;
-  let totalStrings: any = GetQtyKeysInObj(obj);
-  let inputCostDollar = 0, outputCostDollar = 0, feeDollar = 0, totalCostDollar = 0, totalCostAPICredits = 0;
-  let translatedTextData;
-
-  print ? console.log(app_strings.t("x7CTz5XP")) : 42;
-
   try {
-    for (var key in obj) {
-      print
-        ? console.log(
-          `\n(${currentIndex}/${totalStrings}):\n\n${app_strings.t("xWtfTMu")}`
-        )
-        : 42;
-
-      translatedTextData = await TranslateText({
-        text: obj[key],
-        language,
-        apiKey,
-        model_chosen,
-        print: false,
-        progressIntervalMs,
-
-        onJobCreated: (jobId) => {
-          //console.log(`The background HTTP job got created successfully ! it's id is: ${jobId}`);
-        },
-        onSuccess: (output) => {
-          //console.log(`Success: ${JSON.stringify(output, null, 2)}`);
-        },
-        onError: (e) => {
-          //console.log(`Error: ${JSON.stringify(e?.response?.data, null, 2)}`);
-        },
-        onProgress: (progress) => {
-          //console.log(`Job Progress: ${JSON.stringify(progress, null, 2)}`);
-        },
-      });
-
-      await Delay(5000);
-
-      while (retriesCount <= retries && !translatedTextData) {
-        print
-          ? console.log(app_strings.t("x8H4nyVx") + ` ${retriesCount}/${retries}`)
-          : 42;
-
-        translatedTextData = await TranslateText({
-          text: obj[key],
-          language,
-          apiKey,
-          model_chosen,
-          print: false,
-          progressIntervalMs,
-
-          onJobCreated: (jobId) => {
-            //console.log(`The background HTTP job got created successfully ! it's id is: ${jobId}`);
-          },
-          onSuccess: (output) => {
-            //console.log(`Success: ${JSON.stringify(output, null, 2)}`);
-          },
-          onError: (e) => {
-            //console.log(`Error: ${JSON.stringify(e?.response?.data, null, 2)}`);
-          },
-          onProgress: (progress) => {
-            //console.log(`Job Progress: ${JSON.stringify(progress, null, 2)}`);
-          },
-
-        });
-
-        await Delay(5000);
-
-        retriesCount++;
+    // Split obj into subobjects if it contains more than 15 keys
+    const subObjects: any[] = [];
+    if (Object.keys(obj).length > 15) {
+      let keys = Object.keys(obj);
+      while (keys.length > 0) {
+        subObjects.push(
+          keys.splice(0, 15).reduce((acc: any, key) => {
+            acc[key] = obj[key];
+            return acc;
+          }, {})
+        );
       }
-
-      if (!translatedTextData) {
-        throw new Error(`${app_strings.t("xlqky0Sfn3")}: ${obj[key]}`);
-      } else {
-        retriesCount = 1;
-      }
-
-
-
-      newObj[key] = translatedTextData.answer.result;
-
-      inputCostDollar += translatedTextData.usage.inputCostDollar;
-      outputCostDollar += translatedTextData.usage.outputCostDollar;
-      feeDollar += translatedTextData.usage.feeDollar;
-      totalCostDollar += translatedTextData.usage.totalCostDollar;
-      totalCostAPICredits += translatedTextData.usage.totalCostAPICredits;
-
-      currentIndex++;
-
-      print ? console.log(`✅ ` + app_strings.t("xlqZy0Sf") + `: ${translatedTextData.answer.result}`) : 42;
-
+    } else {
+      subObjects.push(obj);
     }
 
-    /*
-    The goal of the 3 sister code lines below,
-    is to get an object like {
-  answer: any,
-  usage: {
-    "inputCostDollar": number,
-    "outputCostDollar": number,
-    "feeDollar": number,
-    "totalCostDollar": number,
-    "totalCostAPICredits": number,
-    "APICreditsLeft": number
-  }
-}
-    */
+    const translatedObjects: any[] = [];
+    const translatedObjectsRaw: any[] = [];
 
+    let itemCount = 0;
+    
+    
 
-    translatedTextData.answer = newObj;
+    for (const individualSubObject of subObjects) {
+      let retryCount = 0;
+      let translatedObjDataRaw: any = null;
+      
 
-    translatedTextData.usage.inputCostDollar = inputCostDollar;
-    translatedTextData.usage.outputCostDollar = outputCostDollar;
-    translatedTextData.usage.feeDollar = feeDollar;
-    translatedTextData.usage.totalCostDollar = totalCostDollar;
-    translatedTextData.usage.totalCostAPICredits = totalCostAPICredits;
+      while (retryCount <= retries) {
+        
 
-    RunIfPossible({ func: onSuccess, args: translatedTextData });
+        print && console.log(`⌛ ${itemCount + 1} / ${subObjects.length}: Translation in progress`);
 
-    return translatedTextData;
-  } catch (err) {
-    // Handle network errors or exceptions
-    print && console.error(`${app_strings.t("xlqkylp0Sfn3")}: `, err);
+        translatedObjDataRaw = await GetGPTCode({
+          progressIntervalMs,
+          model_chosen,
+          prompt: `Translate all the key values of ${JSON.stringify(individualSubObject, null, 2)} to ${language}, and return the translated JSON object.`,
+          onSuccess: (chatGPTOutput) => {
+            print && console.log(`✅ ${itemCount + 1} / ${subObjects.length}: Translation successful! Take a look: ${chatGPTOutput.answer.codePart}`);
+          },
+          onProgress: (progress) => { },
+          onError: (e) => {
+            print && console.log(`❌ ${itemCount + 1} / ${subObjects.length}: Translation failed... Retrying ;-)`);
+          },
+          apiKey,
+        });
 
-    RunIfPossible({ func: onError, args: err });
+        if (translatedObjDataRaw !== null &&  TryParse(translatedObjDataRaw.answer.codePart)) {
+          break; // Break the loop if successful
+        } else {
+          print && console.log(`❌ ${itemCount + 1} / ${subObjects.length}: Translation failed... Retrying ;-)`);
+        }
 
+        retryCount++;
+
+        await Delay(progressIntervalMs)
+
+        // Optionally, you can introduce a delay between retries here
+        // For example: await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+
+      
+
+      if (translatedObjDataRaw === null) {
+        throw new Error(`❌ The object translation failed after ${retries + 1} retries. Giving up.`);
+      }
+
+      const codePartObj = JSON.parse(translatedObjDataRaw.answer.codePart);
+      translatedObjects.push(codePartObj);
+      translatedObjectsRaw.push(translatedObjDataRaw)
+
+      
+
+      itemCount++;
+    }
+
+    
+
+    const bigTranslatedObject = Object.assign({}, ...translatedObjects);
+
+    const totalCost = translatedObjectsRaw.reduce(
+      (acc, translatedObjDataRaw) => {
+        const usage = translatedObjDataRaw.usage;
+        acc.inputCostDollar += usage.inputCostDollar;
+        acc.outputCostDollar += usage.outputCostDollar;
+        acc.feeDollar += usage.feeDollar;
+        acc.totalCostDollar += usage.totalCostDollar;
+        acc.totalCostAPICredits += usage.totalCostAPICredits;
+        acc.APICreditsLeft = usage.APICreditsLeft;
+        return acc;
+      },
+      {
+        inputCostDollar: 0,
+        outputCostDollar: 0,
+        feeDollar: 0,
+        totalCostDollar: 0,
+        totalCostAPICredits: 0,
+        APICreditsLeft: 0,
+      }
+    );
+
+    const result = {
+      answer: bigTranslatedObject,
+      usage: totalCost,
+    };
+
+    print && console.log(
+      `
+✅  The Object Translation is successful! Take a look: 
+
+${JSON.stringify(bigTranslatedObject, null, 2)}
+
+✅ Mission accomplished !!!!
+`);
+
+    if (onSuccess) {
+      onSuccess(result);
+    }
+
+    return result;
+  } catch (error) {
+    if (onError) {
+      onError(error);
+    }
     return null;
   }
 }
-
-

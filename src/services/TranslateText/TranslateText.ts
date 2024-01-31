@@ -111,7 +111,7 @@ export default async function TranslateText({
 
     // Do the initial HTTP request that starts the background work
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/translate_txt?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/translate_txt?apiKey=${apiKey}`,
       { model_chosen, text, language }
     );
 

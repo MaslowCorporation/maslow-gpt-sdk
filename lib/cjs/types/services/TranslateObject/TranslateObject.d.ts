@@ -1,4 +1,3 @@
-import { TranslateObjectStatus } from "./pieces/TranslateObjectStatus.js";
 /**
  *
  * Uncomment this code below, and run the
@@ -59,7 +58,7 @@ export default function TranslateObject({ model_chosen, obj, language, apiKey, r
     language: string;
     retries?: number;
     progressIntervalMs: number;
-    onProgress?: (progress: TranslateObjectStatus) => void;
+    onProgress?: (progress: any) => void;
     onSuccess?: (output: any) => void;
     onJobCreated?: (jobId: string) => void;
     onError?: (error: any) => void;

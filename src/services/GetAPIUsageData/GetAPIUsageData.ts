@@ -22,7 +22,7 @@ export default async function GetAPIUsageData({
       console.log("Récupération de données d'utilisation d'API en cours...");
 
     const response = await axios.get(
-      `${Constants.api_base_url_tailscale}/usage/${stripeCustomerId}`
+      `${Constants.api_base_url_web}/usage/${stripeCustomerId}`
     );
 
     const responseData = response.data;

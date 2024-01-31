@@ -113,7 +113,7 @@ export default async function GetChatGPTArt({
 
     // Do the initial HTTP request that starts the background work
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/get_gpt_art?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/get_gpt_art?apiKey=${apiKey}`,
       { model_chosen, prompt, img_width, img_height }
     );
 

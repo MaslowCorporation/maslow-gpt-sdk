@@ -29,7 +29,7 @@ export default async function CreateArduinoSketch({
     print && console.log(app_strings.t("xKMRBTG"), model_chosen);
 
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/create_arduino_sketch?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/create_arduino_sketch?apiKey=${apiKey}`,
       {
         model_chosen,
         programDescription,

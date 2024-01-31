@@ -86,7 +86,7 @@ export default async function TemplateGPTCompletion({
 
     // Do the initial HTTP request that starts the background work
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/long_http_request_endpoint?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/long_http_request_endpoint?apiKey=${apiKey}`,
       {
         prompt,
         params,

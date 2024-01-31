@@ -104,7 +104,7 @@ export default async function GoogleLogin({
 
     // Do the initial HTTP request that starts the background work
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/google_login?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/google_login?apiKey=${apiKey}`,
       {
         params,
       }

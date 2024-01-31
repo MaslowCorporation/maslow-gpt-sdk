@@ -106,7 +106,7 @@ export default async function CompileArduinoSketch({
 
     // Do the initial HTTP request that starts the background work
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/compile_arduino_sketch?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/compile_arduino_sketch?apiKey=${apiKey}`,
       { code_string: codeString }
     );
 

@@ -118,7 +118,7 @@ export default async function GetChatGPTFunction({
     // Do the initial HTTP request that starts the background work
 
     const response = await axios.post(
-      `${Constants.api_base_url_tailscale}/get_gpt_func?apiKey=${apiKey}`,
+      `${Constants.api_base_url_web}/get_gpt_func?apiKey=${apiKey}`,
       {
         model_chosen,
         functionName,
