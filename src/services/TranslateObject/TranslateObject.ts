@@ -127,16 +127,20 @@ export default async function TranslateObject({
           },
           onProgress: (progress) => { },
           onError: (e) => {
-            print && console.log(`❌ ${itemCount + 1} / ${subObjects.length}: Translation failed... Retrying ;-)`);
+            print && console.log(`❌ ${itemCount + 1} / ${subObjects.length}: Translation failed... Let's retry ;-)`);
           },
           apiKey,
         });
 
-        if (translatedObjDataRaw !== null &&  TryParse(translatedObjDataRaw.answer.codePart)) {
-          break; // Break the loop if successful
-        } else {
-          print && console.log(`❌ ${itemCount + 1} / ${subObjects.length}: Translation failed... Retrying ;-)`);
-        }
+        // if there's a result
+        if (translatedObjDataRaw !== null) {
+          // if this result is parseable into an object
+          if (TryParse(translatedObjDataRaw.answer.codePart)) {
+            break; // Break the loop if we got an object from result
+          } else {
+            print && console.log(`❌ ${itemCount + 1} / ${subObjects.length}: Oops....We couldn't parse the raw translation into an object... Let's retry ;-)`);
+          }
+        } 
 
         retryCount++;
 
