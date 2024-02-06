@@ -88,24 +88,6 @@ export default async function UploadFileToCloud({
   jobId?: string;
 }): Promise<any> {
   try {
-    print && console.log("Let's start a HTTP request !");
-
-    // if a jobId is given, then we go straight to the job checkup loop
-    if (jobId) {
-
-      print && console.log("Let's restart an ongoing job, amigo !");
-
-      return CheckBackgroundWork({
-        print,
-        progressIntervalMs,
-        apiKey,
-        onSuccess,
-        onError,
-        onProgress,
-        jobId
-      });
-    }
-
     // Create a new FormData object
     const formData = new FormData();
 
@@ -123,34 +105,47 @@ export default async function UploadFileToCloud({
       }
     );
 
-    // if a background job was successfully started
+
+
+
+    const responseData = response.data;
+    const prettyResponseData = JSON.stringify(responseData, null, 2);
+
     if (response.status >= 200 && response.status < 300) {
-      // get the jobId of this freshly created job,
-      // and run the job creation callback
-      const freshJobIdResponse = response.data;
-      const freshJobId = freshJobIdResponse.id;
+      const answer = responseData;
 
-      onJobCreated && await onJobCreated(freshJobId);
+      // Success (2xx response)
+      print && console.log("Request succeeded!");
 
-      // Periodically check for updates to handle the background job
-      return CheckBackgroundWork({
-        print,
-        progressIntervalMs,
-        apiKey,
-        onSuccess,
-        onError,
-        onProgress,
-        jobId: freshJobId
-      });
+      print && console.log("Answer:", answer);
+
+      if (onSuccess) {
+        onSuccess(answer);
+      }
+
+      return answer;
     } else {
-      // we ccouldn't create a background job for some reason.
-      // Throw
-      return HandleFailedBackgroundWorkInit(response, print, onError);
+      // Handle error (non-2xx response)
+      print && console.log("Request failed!");
+      print && console.log("Status:", response.status);
+      print && console.log("Response data:", prettyResponseData);
+
+      if (onError) {
+        onError(new Error("Request failed"));
+      }
+
+      return null;
     }
   } catch (error: any) {
+
+
     // Handle network errors or exceptions
-    return HandleError(print, error, onError);
+    print && console.error("An error occurred:", error?.response?.data);
+
+    if (onError) {
+      onError(error);
+    }
+
+    return null;
   }
 }
-
-
