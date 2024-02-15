@@ -1,7 +1,5 @@
 // Your Own SDK Methods imports
 /* PLOP_INJECT_IMPORT */
-import GoogleLogin from "./services/GoogleLogin/GoogleLogin.js";
-import GetGoogleAPIKey from "./services/GetGoogleAPIKey/GetGoogleAPIKey.js";
 import GetGPTCode from "./services/GetGPTCode/GetGPTCode.js";
 import GetChatGPTArt from "./services/GetChatGPTArt/GetChatGPTArt.js";
 import TranslateObject from "./services/TranslateObject/TranslateObject.js";
@@ -20,23 +18,23 @@ import GetAPISubscriptionLink from "./services/GetAPISubscriptionLink/GetAPISubs
 import Buy5KAPICreditsLink from "./services/Buy5KAPICreditsLink/Buy5KAPICreditsLink.js";
 import GetAPIClientInfo from "./services/GetAPIClientInfo/GetAPIClientInfo.js";
 import UpdateWorkData from "./services/UpdateWorkData/UpdateWorkData.js";
+import GoogleLogin from "./services/GoogleLogin/GoogleLogin.js";
+import GetGoogleAPIKey from "./services/GetGoogleAPIKey/GetGoogleAPIKey.js";
 
 export default {
   // Your Own SDK Methods
   /* PLOP_INJECT_SDK_METHOD */
-    GoogleLogin,
-    GetGoogleAPIKey,
-    GetGPTCode,
-    GetChatGPTArt,
-    TranslateObject,
-    TranslateText,
-    GetChatGPTFunction,
-    CompileArduinoSketch,
-    CreateArduinoSketch,
-    UploadFileToCloud,
-    DeleteFileFromCloud,
-    TransformCloudFile,
-    GetGPTOutput,
+  GetGPTCode,
+  GetChatGPTArt,
+  TranslateObject,
+  TranslateText,
+  GetChatGPTFunction,
+  CompileArduinoSketch,
+  CreateArduinoSketch,
+  UploadFileToCloud,
+  DeleteFileFromCloud,
+  TransformCloudFile,
+  GetGPTOutput,
 
   // Starterpack SDK Methods
   GetAPISubscriptionLink,
@@ -44,4 +42,6 @@ export default {
   GetAPIClientInfo,
   GetWorkStatus,
   UpdateWorkData,
+  GoogleLogin,
+  GetGoogleAPIKey,
 };
